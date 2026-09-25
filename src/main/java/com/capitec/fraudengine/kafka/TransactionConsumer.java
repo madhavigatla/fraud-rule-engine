@@ -17,7 +17,7 @@ public class TransactionConsumer {
     private final FraudRuleEngine fraudRuleEngine;
 
     @Bean
-    public Consumer<Transaction> consumeTransaction() {
+    public Consumer<Transaction> transactionEventConsumer() {
         return transaction -> {
             log.info("Received transaction for processing: {}", transaction.getTransactionId());
             try {

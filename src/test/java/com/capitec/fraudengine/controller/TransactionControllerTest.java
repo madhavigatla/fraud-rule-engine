@@ -43,7 +43,7 @@ public class TransactionControllerTest {
                 .timestamp(LocalDateTime.now())
                 .build();
 
-        when(streamBridge.send(eq("transaction-out-0"), any(Transaction.class))).thenReturn(true);
+        when(streamBridge.send(eq("transactionEventProducer"), any(Transaction.class))).thenReturn(true);
 
         mockMvc.perform(post("/api/transactions/post-transaction")
                 .contentType(MediaType.APPLICATION_JSON)

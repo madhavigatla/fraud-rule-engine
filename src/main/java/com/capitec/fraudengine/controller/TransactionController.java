@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransactionController {
 
     private final StreamBridge streamBridge;
-    private final static String transactionProducer ="transaction-out-0";
+    private final static String transactionProducer ="transactionEventProducer";
 
     @PostMapping("/post-transaction")
     public ResponseEntity<String> sendTransaction(@RequestBody Transaction transaction) {
