@@ -1,8 +1,0 @@
-/Users/jiyanivanshi/Dev/fraud-rule-engine/src/main/java/com/capitec/fraudengine/service/FraudRuleEngine.java
-/Users/jiyanivanshi/Dev/fraud-rule-engine/src/main/java/com/capitec/fraudengine/controller/FraudAlertController.java
-/Users/jiyanivanshi/Dev/fraud-rule-engine/src/main/java/com/capitec/fraudengine/model/FraudAlert.java
-/Users/jiyanivanshi/Dev/fraud-rule-engine/src/main/java/com/capitec/fraudengine/repository/FraudAlertRepository.java
-/Users/jiyanivanshi/Dev/fraud-rule-engine/src/main/java/com/capitec/fraudengine/model/Transaction.java
-/Users/jiyanivanshi/Dev/fraud-rule-engine/src/main/java/com/capitec/fraudengine/FraudRuleEngineApplication.java
-/Users/jiyanivanshi/Dev/fraud-rule-engine/src/main/java/com/capitec/fraudengine/kafka/TransactionConsumer.java
-/Users/jiyanivanshi/Dev/fraud-rule-engine/src/main/java/com/capitec/fraudengine/controller/TransactionController.java
