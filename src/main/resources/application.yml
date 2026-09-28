@@ -1,4 +1,14 @@
+logging:
+  level:
+    com.capitec.fraudengine: DEBUG
+    org.springframework.cloud.stream: DEBUG
+    org.springframework.kafka: INFO
+
 spring:
+  security:
+    user:
+      name: admin
+      password: password
   application:
     name: fraud-rule-engine
   datasource:
@@ -7,6 +17,7 @@ spring:
     username: sa
     password: password
   jpa:
+    show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
@@ -17,13 +28,27 @@ spring:
     function:
       definition: transactionEventConsumer
     stream:
+      function:
+        definition: transactionEventConsumer
+      kafka:
+        binder:
+          auto-create-topics: true
+        bindings:
+          transactionEventConsumer-in-0:
+            consumer:
+              enableDlq: true
+              dlqName: transactions-dlq
+          transactionEventProducer-out-0:
+            producer:
+              configuration:
+                key.serializer: org.apache.kafka.common.serialization.StringSerializer
       bindings:
         transactionEventConsumer-in-0:
           destination: ${app.kafka.transaction-topic}
           group: fraud-engine-group
-          content-type: text/plain;charset=UTF-8
-        transactionEventProducer:
+        transactionEventProducer-out-0:
           destination: ${app.kafka.transaction-topic}
+          content-type: application/json
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
@@ -32,8 +57,21 @@ spring:
         spring:
           json:
             trusted:
-              packages: com.capitec.fraudengine.model
+              packages: "com.capitec.fraudengine.model"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info,metrics
+  endpoint:
+    health:
+      show-details: always
 
 app:
+  rules:
+    high-value-threshold: 10000.00
+    velocity-threshold: 3
+    velocity-window-minutes: 5
   kafka:
     transaction-topic: transactions

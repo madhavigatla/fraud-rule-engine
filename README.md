@@ -52,11 +52,12 @@ docker-compose up -d
 
 ### Transactions (created this controller to push message to transactionconsumer)
 - **Send transaction for processing**: `POST /api/transactions/post-transaction`
-  - Payload: See `test-payloads.md` for examples.
+  - Payload: See `test-payloads.sh` for examples.
 
 ### Fraud Alerts
 - **Get all fraud alerts**: `GET /api/fraud-alerts`
-- **Get alerts by customer ID**: `GET /api/fraud-alerts/transaction/{customerId}`
+  - Optional query parameter: `severity` (e.g., `?severity=HIGH`)
+- **Get alerts by customer ID**: `GET /api/fraud-alerts/customer/{customerId}`
 
 ## Testing
 
@@ -66,6 +67,8 @@ Run unit and integration tests:
 ```
 
 ## Production Considerations
-- **Scalability**: The service is stateless and can be scaled horizontally by increasing Kafka partitions and consumer instances.
-- **Monitoring**: Integration with Spring Boot Actuator for health checks and metrics.
-- **Resilience**: Kafka consumer includes error handling and can be configured with DLQs (Dead Letter Queues).
+- **Security**: Basic Authentication enabled for all API endpoints.
+- **Resilience**: Kafka consumer includes error handling and is configured with a Dead Letter Queue (DLQ) for failed messages.
+- **Monitoring**: Integration with Spring Boot Actuator for health checks, metrics, and Prometheus support.
+- **Scalability**: Stateless architecture ready for horizontal scaling (Note: Distributed velocity check recommended for multi-instance deployments).
+- **Extensibility**: Rules are implemented using a Strategy pattern, making it easy to add new fraud detection logic.

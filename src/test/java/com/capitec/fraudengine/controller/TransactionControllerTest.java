@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,17 +37,20 @@ public class TransactionControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser
     void testSendTransaction() throws Exception {
         Transaction transaction = Transaction.builder()
                 .transactionId("TX123")
                 .customerId("CUST001")
                 .amount(new BigDecimal("100.00"))
+                .currency("ZAR")
                 .timestamp(LocalDateTime.now())
                 .build();
 
-        when(streamBridge.send(eq("transactionEventProducer"), any(Transaction.class))).thenReturn(true);
+        when(streamBridge.send(eq("transactionEventProducer-out-0"), any(Transaction.class))).thenReturn(true);
 
         mockMvc.perform(post("/api/transactions/post-transaction")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(transaction)))
                 .andExpect(status().isOk())
